@@ -46,15 +46,15 @@
         </div>
       </div>
 
-      <!-- Question 2: Commute Distance -->
+      <!-- Question 2: Commute Distance (Updated to 0-50 miles) -->
       <div>
         <p class="font-semibold">2. How far are you commuting from?</p>
         <div class="mt-2">
-          <input type="range" id="commute_distance" min="0" max="80" value="0" class="w-full">
+          <input type="range" id="commute_distance" min="0" max="50" value="0" class="w-full">
           <div class="flex justify-between text-sm text-gray-600">
             <span>0 miles</span>
-            <span>28 miles</span>
-            <span>80 miles</span>
+            <span>25 miles</span>
+            <span>50 miles</span>
           </div>
           <p class="text-sm text-gray-600 mt-1">Distance: <span id="distance_value">0</span> miles</p>
         </div>
@@ -79,28 +79,28 @@
         </div>
       </div>
 
-      <!-- Question 4: Heating Usage -->
+      <!-- Question 4: Heating Usage (Updated to 0-50-100%) -->
       <div>
         <p class="font-semibold">4. Percentage of time during the working day that you have the heating on (throughout the year)</p>
         <div class="mt-2">
           <input type="range" id="heating_usage" min="0" max="100" value="0" class="w-full">
           <div class="flex justify-between text-sm text-gray-600">
             <span>0%</span>
-            <span>80%</span>
+            <span>50%</span>
             <span>100%</span>
           </div>
           <p class="text-sm text-gray-600 mt-1">Usage: <span id="heating_value">0</span>%</p>
         </div>
       </div>
 
-      <!-- Question 5: Air Conditioning Usage -->
+      <!-- Question 5: Air Conditioning Usage (Updated to 0-50-100%) -->
       <div>
         <p class="font-semibold">5. Percentage of time during the working day that you have the air conditioning on (throughout the year)</p>
         <div class="mt-2">
           <input type="range" id="ac_usage" min="0" max="100" value="0" class="w-full">
           <div class="flex justify-between text-sm text-gray-600">
             <span>0%</span>
-            <span>80%</span>
+            <span>50%</span>
             <span>100%</span>
           </div>
           <p class="text-sm text-gray-600 mt-1">Usage: <span id="ac_value">0</span>%</p>
