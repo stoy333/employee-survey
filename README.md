@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <!-- Question 2: Commute Distance (Updated to 0-50 miles) -->
+      <!-- Question 2: Commute Distance -->
       <div>
         <p class="font-semibold">2. How far are you commuting from?</p>
         <div class="mt-2">
@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <!-- Question 4: Heating Usage (Updated to 0-50-100%) -->
+      <!-- Question 4: Heating Usage -->
       <div>
         <p class="font-semibold">4. Percentage of time during the working day that you have the heating on (throughout the year)</p>
         <div class="mt-2">
@@ -93,7 +93,7 @@
         </div>
       </div>
 
-      <!-- Question 5: Air Conditioning Usage (Updated to 0-50-100%) -->
+      <!-- Question 5: Air Conditioning Usage -->
       <div>
         <p class="font-semibold">5. Percentage of time during the working day that you have the air conditioning on (throughout the year)</p>
         <div class="mt-2">
@@ -182,62 +182,18 @@
           return;
         }
 
-        // Aggregate commute methods
-        const commuteMethodCounts = {
-          'London Underground': 0,
-          'Cycle/scoot': 0,
-          'Walk': 0,
-          'National Rail': 0,
-          'Local Buses': 0,
-          'Car/taxi': 0,
-          'Motorbike': 0
-        };
-        responses.forEach(response => {
-          response.commuteMethods.forEach(method => {
-            commuteMethodCounts[method]++;
-          });
+        // Format individual responses
+        let result = `Individual Survey Responses (${responses.length} total):\n\n`;
+        responses.forEach((response, index) => {
+          result += `Response ${index + 1}:\n`;
+          result += `1. Commute Methods: ${response.commuteMethods.length > 0 ? response.commuteMethods.join(', ') : 'None selected'}\n`;
+          result += `2. Commute Distance: ${response.commuteDistance} miles\n`;
+          result += `3. Heat/Power Source: ${response.heatPower}\n`;
+          result += `4. Heating Usage: ${response.heatingUsage}%\n`;
+          result += `5. Air Conditioning Usage: ${response.acUsage}%\n\n`;
         });
 
-        // Calculate average commute distance
-        const avgCommuteDistance = responses.reduce((sum, r) => sum + r.commuteDistance, 0) / responses.length;
-
-        // Aggregate heat/power sources
-        const heatPowerCounts = { Gas: 0, Electricity: 0, Solar: 0, 'Not selected': 0 };
-        responses.forEach(response => {
-          heatPowerCounts[response.heatPower]++;
-        });
-
-        // Calculate average heating and AC usage
-        const avgHeatingUsage = responses.reduce((sum, r) => sum + r.heatingUsage, 0) / responses.length;
-        const avgAcUsage = responses.reduce((sum, r) => sum + r.acUsage, 0) / responses.length;
-
-        // Format the consolidated results
-        const result = `
-Consolidated Survey Results (${responses.length} responses):
-
-1. Commute Methods (number of respondents selecting each):
-   - London Underground: ${commuteMethodCounts['London Underground']}
-   - Cycle/scoot: ${commuteMethodCounts['Cycle/scoot']}
-   - Walk: ${commuteMethodCounts['Walk']}
-   - National Rail: ${commuteMethodCounts['National Rail']}
-   - Local Buses: ${commuteMethodCounts['Local Buses']}
-   - Car/taxi: ${commuteMethodCounts['Car/taxi']}
-   - Motorbike: ${commuteMethodCounts['Motorbike']}
-
-2. Average Commute Distance: ${avgCommuteDistance.toFixed(2)} miles
-
-3. Heat/Power Source (number of respondents):
-   - Gas: ${heatPowerCounts['Gas']}
-   - Electricity: ${heatPowerCounts['Electricity']}
-   - Solar: ${heatPowerCounts['Solar']}
-   - Not selected: ${heatPowerCounts['Not selected']}
-
-4. Average Heating Usage: ${avgHeatingUsage.toFixed(2)}%
-
-5. Average Air Conditioning Usage: ${avgAcUsage.toFixed(2)}%
-
-Please copy this summary and email it to daniel.stoyanov@veretec.co.uk.
-        `;
+        result += `Please copy this summary and email it to daniel.stoyanov@veretec.co.uk.`;
         alert(result);
       } else {
         alert('Incorrect password. Only authorized personnel can view the results.');
