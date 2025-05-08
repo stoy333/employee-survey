@@ -1,1 +1,248 @@
-# employee-survey
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Commute Survey</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-6">Employee Commute Survey</h1>
+    
+    <div class="space-y-6">
+      <!-- Question 1: Commute Method -->
+      <div>
+        <p class="font-semibold">1. What is your commute method to the office?</p>
+        <div class="space-y-2 mt-2">
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="London Underground" class="mr-2">
+            London Underground
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="Cycle/scoot" class="mr-2">
+            Cycle/scoot
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="Walk" class="mr-2">
+            Walk
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="National Rail" class="mr-2">
+            National Rail
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="Local Buses" class="mr-2">
+            Local Buses
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="Car/taxi" class="mr-2">
+            Car/taxi
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="commute_method" value="Motorbike" class="mr-2">
+            Motorbike
+          </label>
+        </div>
+      </div>
+
+      <!-- Question 2: Commute Distance -->
+      <div>
+        <p class="font-semibold">2. How far are you commuting from?</p>
+        <div class="mt-2">
+          <input type="range" id="commute_distance" min="0" max="80" value="0" class="w-full">
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>0 miles</span>
+            <span>28 miles</span>
+            <span>80 miles</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">Distance: <span id="distance_value">0</span> miles</p>
+        </div>
+      </div>
+
+      <!-- Question 3: Heat and Power Source -->
+      <div>
+        <p class="font-semibold">3. How do you heat and power your home?</p>
+        <div class="space-y-2 mt-2">
+          <label class="flex items-center">
+            <input type="radio" name="heat_power" value="Gas" class="mr-2">
+            Gas
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="heat_power" value="Electricity" class="mr-2">
+            Electricity
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="heat_power" value="Solar" class="mr-2">
+            Solar
+          </label>
+        </div>
+      </div>
+
+      <!-- Question 4: Heating Usage -->
+      <div>
+        <p class="font-semibold">4. Percentage of time during the working day that you have the heating on (throughout the year)</p>
+        <div class="mt-2">
+          <input type="range" id="heating_usage" min="0" max="100" value="0" class="w-full">
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>0%</span>
+            <span>80%</span>
+            <span>100%</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">Usage: <span id="heating_value">0</span>%</p>
+        </div>
+      </div>
+
+      <!-- Question 5: Air Conditioning Usage -->
+      <div>
+        <p class="font-semibold">5. Percentage of time during the working day that you have the air conditioning on (throughout the year)</p>
+        <div class="mt-2">
+          <input type="range" id="ac_usage" min="0" max="100" value="0" class="w-full">
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>0%</span>
+            <span>80%</span>
+            <span>100%</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">Usage: <span id="ac_value">0</span>%</p>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex space-x-4">
+        <button id="submit_btn" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Submit</button>
+        <button id="view_results_btn" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">View Consolidated Results</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Clear existing responses on page load
+    localStorage.setItem('surveyResponses', JSON.stringify([]));
+
+    // Update distance value display
+    const distanceSlider = document.getElementById('commute_distance');
+    const distanceValue = document.getElementById('distance_value');
+    distanceSlider.addEventListener('input', () => {
+      distanceValue.textContent = distanceSlider.value;
+    });
+
+    // Update heating usage value display
+    const heatingSlider = document.getElementById('heating_usage');
+    const heatingValue = document.getElementById('heating_value');
+    heatingSlider.addEventListener('input', () => {
+      heatingValue.textContent = heatingSlider.value;
+    });
+
+    // Update AC usage value display
+    const acSlider = document.getElementById('ac_usage');
+    const acValue = document.getElementById('ac_value');
+    acSlider.addEventListener('input', () => {
+      acValue.textContent = acSlider.value;
+    });
+
+    // Handle form submission
+    const submitButton = document.getElementById('submit_btn');
+    submitButton.addEventListener('click', () => {
+      const commuteMethods = Array.from(document.querySelectorAll('input[name="commute_method"]:checked'))
+        .map(input => input.value);
+      const commuteDistance = parseInt(document.getElementById('commute_distance').value);
+      const heatPower = document.querySelector('input[name="heat_power"]:checked')?.value || 'Not selected';
+      const heatingUsage = parseInt(document.getElementById('heating_usage').value);
+      const acUsage = parseInt(document.getElementById('ac_usage').value);
+
+      // Store the response in localStorage
+      const responses = JSON.parse(localStorage.getItem('surveyResponses'));
+      responses.push({
+        commuteMethods,
+        commuteDistance,
+        heatPower,
+        heatingUsage,
+        acUsage
+      });
+      localStorage.setItem('surveyResponses', JSON.stringify(responses));
+
+      // Disable the submit button after submission
+      submitButton.disabled = true;
+      submitButton.classList.remove('hover:bg-blue-600');
+      submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+
+      alert('Response submitted successfully! You can view consolidated results using the button below. Refresh the page to submit another response.');
+    });
+
+    // Handle view consolidated results with password protection
+    const viewResultsButton = document.getElementById('view_results_btn');
+    viewResultsButton.addEventListener('click', () => {
+      const password = prompt('Please enter the password to view results:');
+      const correctPassword = 'yourpassword123'; // Change this to your desired password
+
+      if (password === correctPassword) {
+        const responses = JSON.parse(localStorage.getItem('surveyResponses'));
+        if (responses.length === 0) {
+          alert('No responses submitted yet.');
+          return;
+        }
+
+        // Aggregate commute methods
+        const commuteMethodCounts = {
+          'London Underground': 0,
+          'Cycle/scoot': 0,
+          'Walk': 0,
+          'National Rail': 0,
+          'Local Buses': 0,
+          'Car/taxi': 0,
+          'Motorbike': 0
+        };
+        responses.forEach(response => {
+          response.commuteMethods.forEach(method => {
+            commuteMethodCounts[method]++;
+          });
+        });
+
+        // Calculate average commute distance
+        const avgCommuteDistance = responses.reduce((sum, r) => sum + r.commuteDistance, 0) / responses.length;
+
+        // Aggregate heat/power sources
+        const heatPowerCounts = { Gas: 0, Electricity: 0, Solar: 0, 'Not selected': 0 };
+        responses.forEach(response => {
+          heatPowerCounts[response.heatPower]++;
+        });
+
+        // Calculate average heating and AC usage
+        const avgHeatingUsage = responses.reduce((sum, r) => sum + r.heatingUsage, 0) / responses.length;
+        const avgAcUsage = responses.reduce((sum, r) => sum + r.acUsage, 0) / responses.length;
+
+        // Format the consolidated results
+        const result = `
+Consolidated Survey Results (${responses.length} responses):
+
+1. Commute Methods (number of respondents selecting each):
+   - London Underground: ${commuteMethodCounts['London Underground']}
+   - Cycle/scoot: ${commuteMethodCounts['Cycle/scoot']}
+   - Walk: ${commuteMethodCounts['Walk']}
+   - National Rail: ${commuteMethodCounts['National Rail']}
+   - Local Buses: ${commuteMethodCounts['Local Buses']}
+   - Car/taxi: ${commuteMethodCounts['Car/taxi']}
+   - Motorbike: ${commuteMethodCounts['Motorbike']}
+
+2. Average Commute Distance: ${avgCommuteDistance.toFixed(2)} miles
+
+3. Heat/Power Source (number of respondents):
+   - Gas: ${heatPowerCounts['Gas']}
+   - Electricity: ${heatPowerCounts['Electricity']}
+   - Solar: ${heatPowerCounts['Solar']}
+   - Not selected: ${heatPowerCounts['Not selected']}
+
+4. Average Heating Usage: ${avgHeatingUsage.toFixed(2)}%
+
+5. Average Air Conditioning Usage: ${avgAcUsage.toFixed(2)}%
+
+Please copy this summary and email it to daniel.stoyanov@veretec.co.uk.
+        `;
+        alert(result);
+      } else {
+        alert('Incorrect password. Only authorized personnel can view the results.');
+      }
+    });
+  </script>
+</body>
+</html>
